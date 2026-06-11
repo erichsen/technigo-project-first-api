@@ -1,8 +1,11 @@
+import dotenv from "dotenv"
 import cors from "cors"
 import express from "express"
 import mongoose from "mongoose"
 import topMusicData from "./data/top-music.json" with { type: "json" }
 import listEndpoints from "express-list-endpoints"
+
+dotenv.config()
 
 // If you're using one of our datasets, uncomment the appropriate import below
 // to get started!
