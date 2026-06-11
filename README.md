@@ -1,24 +1,34 @@
-# First API
+# Spotify Tracks API
 
-Replace this readme with your own information about the project. You can include things like:
+A RESTful API built with Express and MongoDB that serves data about 50 popular Spotify tracks. Built as part of the Technigo bootcamp.
 
-- Brief description of the assignment
-- How you approached the task, what tools and techniques you used, and how you planned it
-- If you had more time, what would be next?
-- How to run the project locally
+## Endpoints
+
+| Method | Path | Description |
+|--------|------|-------------|
+| GET | `/` | API documentation (all available endpoints) |
+| GET | `/tracks` | Returns all tracks. Supports `?genre=` and `?artistName=` query filters |
+| GET | `/tracks/:id` | Returns a single track by MongoDB ID |
+| GET | `/tracks/genre/:genre` | Returns all tracks matching a genre |
 
 ## View it live
-Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.
 
+https://technigo-project-first-api-7ar3.onrender.com
 
-## Getting Started with the Project
+## Tech Stack
 
-### Dependency Installation & Startup Development Server
+- Node.js + Express
+- MongoDB Atlas + Mongoose
+- Deployed on Render
 
-Once cloned, navigate to the project's root directory and this project uses npm (Node Package Manager) to manage its dependencies.
-
-The command below is a combination of installing dependencies, opening up the project on VS Code and it will run a development server on your terminal.
+## Run locally
 
 ```bash
 npm i && code . && npm run dev
+```
+
+To seed the database on first run:
+
+```bash
+RESET_DB=true npm run dev
 ```
