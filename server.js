@@ -1,6 +1,8 @@
 import cors from "cors"
 import express from "express"
 import mongoose from "mongoose"
+import topMusicData from "./data/top-music.json" with { type: "json" }
+import listEndpoints from "express-list-endpoints"
 
 // If you're using one of our datasets, uncomment the appropriate import below
 // to get started!
@@ -8,7 +10,32 @@ import mongoose from "mongoose"
 // import booksData from "./data/books.json"
 // import goldenGlobesData from "./data/golden-globes.json"
 // import netflixData from "./data/netflix-titles.json"
-// import topMusicData from "./data/top-music.json"
+
+const Track = mongoose.model('Track', {
+  id: Number,
+  trackName: String,
+  artistName: String,
+  genre: String,
+  bpm: Number,
+  energy: Number,
+  danceability: Number,
+  loudness: Number,
+  liveness: Number,
+  valence: Number,
+  length: Number,
+  acousticness: Number,
+  speechiness: Number,
+  popularity: Number
+})
+if (process.env.RESET_DB) {
+  const seedDatabase = async () => {
+    await Track.deleteMany({})
+    topMusicData.forEach((track) => {
+      new Track(track).save()
+    })
+  }
+  seedDatabase()
+}
 
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/project-first-api"
 mongoose.connect(mongoUrl)
@@ -26,7 +53,26 @@ app.use(express.json())
 
 // Start defining your routes here
 app.get("/", (req, res) => {
-  res.send("Hello Technigo!")
+  res.json(listEndpoints(app))
+})
+
+app.get("/tracks", async (req, res) => {
+  const { genre, artistName } = req.query
+  const filter = {}
+  if (genre) filter.genre = genre
+  if (artistName) filter.artistName = artistName
+  const tracks = await Track.find(filter)
+  res.json(tracks)
+})
+
+app.get("/tracks/:id", async (req, res) => {
+  const track = await Track.findById(req.params.id)
+  res.json(track)
+})
+
+app.get("/tracks/genre/:genre", async (req, res) => {
+  const tracks = await Track.find({ genre: req.params.genre })
+  res.json(tracks)
 })
 
 // Start the server
